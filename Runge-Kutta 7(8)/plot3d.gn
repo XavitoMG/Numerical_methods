@@ -1,0 +1,21 @@
+set terminal qt 1 size 800,600
+
+set xrange [-25:25]
+set yrange [-25:25]
+set zrange [0:50]
+
+set grid xtics ytics ztics
+set ticslevel 0
+
+N = 100000
+tail = 200
+
+do for [t=1:N] {
+
+    start = (t > tail) ? t - tail : 1
+
+
+    splot "trajectoria.txt" every ::start::t using 1:2:3 with lines lw 2 lc rgb "blue" title "òrbita 1", \
+    "trajectoria2.txt" every ::start::t using 1:2:3 with lines lw 2 lc rgb "red" title "òrbita 2"
+    pause 0.01
+}

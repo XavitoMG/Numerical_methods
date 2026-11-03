@@ -1,0 +1,14 @@
+set terminal qt size 800,600
+
+# set xrange [0:5]
+# set yrange [0:5]
+
+set grid
+
+N = 100000
+
+do for [t=1:N] {
+    plot "trajectoria.txt" every ::1::t using 1:2 with lines ls 2 lc rgb "blue"
+    pause 0.01
+
+}
