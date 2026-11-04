@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "matrix_print.h"
 #include "gauss_elimination.h"
 #include "LU_matrix.h"
 #include "LU_solver.h"
@@ -43,17 +44,20 @@ int main(int argc, char * argv[]) {
 
     double *A;
     double *x;
+    double *b;
 
-    A = malloc((n*n + n)*sizeof(double));
+    A = malloc((n*n)*sizeof(double));
     x = malloc(n*sizeof(double));
+    b = malloc(n*sizeof(double));
     p = malloc(n*sizeof(int));
     
     for(int i = 0; i < n*n + n; i++){
-        fscanf(system,"%lf",A+i);
+        if ((i+1)%(n+1)==0) fscanf(system,"%lf",b+(i-n)/(n+1));
+        else fscanf(system,"%lf",A+i-(i+1)/(n+1));
     }
 
     if (method < 4) {
-        error = gauss_elimination(n,A,x,(method-1)%3,tol);
+        error = gauss_elimination(n,A,x,b,(method-1)%3,tol);
     }
 
     if (method == 4) {
@@ -62,7 +66,7 @@ int main(int argc, char * argv[]) {
             printf("Underdetermined/uncompatible system\n");
             return 0;
         }
-        LU_solver(n,A,p,x,tol);
+        LU_solver(n,A,p,x,b,tol);
     }
     
     
@@ -79,6 +83,7 @@ int main(int argc, char * argv[]) {
 
     free(A);
     free(x);
+    free(b);
     free(p);
 
     fclose(system);

@@ -1,8 +1,6 @@
-#include <stdio.h>
+int LU_solver(int n, double *A, int *p, double *x, double *b, double tol) {
 
-int LU_solver(int n, double *A, int *p, double *x, double tol) {
-
-    #define A(i,j) A[i*(n+1) + j]
+    #define A(i,j) A[i*n + j]
 
     // We assume that A is of the LU form.
 
@@ -12,7 +10,7 @@ int LU_solver(int n, double *A, int *p, double *x, double tol) {
     // Solving LUx=Pb. First, we solve Ly = Pb for y.
 
     for (int i = 0; i < n; i++) {
-        y[i] = A(p[i],n);
+        y[i] = b[p[i]];
         for (int j = 0; j < i; j++) y[i] -= A(p[i],j)*y[j];
     }
 

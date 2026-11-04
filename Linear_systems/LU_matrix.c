@@ -1,10 +1,8 @@
-#include <stdio.h>
 #include <math.h>
-#include "matrix_print.h"
 
 int LU_matrix(int n, double *A, int *p, double tol) {
 
-    #define A(i,j) A[i*(n+1) + j]
+    #define A(i,j) A[i*n + j]
 
     int max;
     int temp;
