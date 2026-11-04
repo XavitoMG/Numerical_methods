@@ -1,0 +1,1 @@
+int gauss_elimination(int n, double *A, double *x, int pivot, double tol);

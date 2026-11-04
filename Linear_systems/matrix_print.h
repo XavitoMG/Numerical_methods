@@ -1,0 +1,1 @@
+int matrix_print(int n, int m, double *A);
