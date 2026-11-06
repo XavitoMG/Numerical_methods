@@ -1,0 +1,1 @@
+int QR_solver (int n, int m, double *A, double *x, double *b, int *p, double tol);

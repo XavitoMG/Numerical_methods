@@ -1,1 +1,1 @@
-int LU_matrix(int n, double *A, int *p, double tol);
+int LU_matrix (int n, double *A, int *p, double tol);
