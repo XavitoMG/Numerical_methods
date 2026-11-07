@@ -1,1 +1,0 @@
-int QR_matrix (int n, int m, double *A, int *p, double tol);

@@ -2,29 +2,26 @@
 #include <stdlib.h>
 #include <time.h>
 #include "matrix_print.h"
-#include "gauss_elimination.h"
-#include "LU_matrix.h"
-#include "LU_solver.h"
-#include "QR_matrix.h"
-#include "QR_solver.h"
+#include "linsyslib.h"
 
 int main (int argc, char * argv[]) {
 
-    int n, method, error;
+    int n, method, error, stepmax;
     int *p;
     double tol;
 
     time_t start_time, finish_time;
 
-    if (argc != 3) {
+    if (argc != 4) {
 
-        printf("./linsys_solver n tol\n");
+        printf("./linsys_solver n tol stepmax\n");
 
         return 0;
     }
 
     tol = atof(argv[2]);
     n = atoi(argv[1]);
+    stepmax = atoi(argv[3]);
     
     printf("Choose the numerical method to solve the linear system:\n");
     printf("1) Gauss elimination without pivotage\n");
@@ -32,10 +29,11 @@ int main (int argc, char * argv[]) {
     printf("3) Gauss elimination with full pivotage\n");
     printf("4) LU decomposition\n");
     printf("5) QR decomposition\n");
+    printf("6) Gauss-Seidel method (iterative)\n");
 
     scanf("%i",&method);
 
-    if (method <= 0 || method > 5) {
+    if (method <= 0 || method > 6) {
         printf("ERROR: Not a valid option\n");
         return 0;
     }
@@ -57,9 +55,13 @@ int main (int argc, char * argv[]) {
     b = malloc(n*sizeof(double));
     p = malloc(n*sizeof(int));
     
-    for(int i = 0; i < n*n + n; i++){
+    for(int i = 0; i < n; i++){
         for (int j = 0; j < n; j++) fscanf(system, "%lf", &A[i*n + j]);
         fscanf(system, "%lf", &b[i]);
+    }
+
+    if (method > 4) {
+        for (int i = 0; i < n; i++) fscanf(system, "%lf", x+i);
     }
 
     start_time = clock();
@@ -82,13 +84,24 @@ int main (int argc, char * argv[]) {
         error = QR_solver(n,n,A,x,b,p,tol);
     }
 
+    if (method == 6) {
+        error = gauss_seidel(n,A,x,b,tol,stepmax);
+    }
+
     finish_time = clock();
     
 
     if (error == -1) {
         printf("Underdetermined/uncompatible system\n");
         return 0;
-
+    }
+    if (error == -2) {
+        printf("An element from the diagonal is 0 (jacobi can't proceed)\n");
+        return 0;
+    }
+    if (error == -10) {
+        printf("The method did not converge\n");
+        return 0;
     }
 
     for (int i = 0; i < n; i++) printf("%.16g ",x[i]);

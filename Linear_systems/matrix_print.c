@@ -10,4 +10,6 @@ int matrix_print (int n, int m, double *A){
         }
         printf("\n");
     }
+
+    return 0;
 }
