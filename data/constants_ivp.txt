@@ -1,0 +1,13 @@
+2
+0 1
+4 -8
+1e-5 1e-10 1e-2 1e-10 10000
+0
+3 26.5 1
+
+n
+t0 T
+x0[n]
+h hmin hmax tol nstepmax
+n-parameters
+prms[n-parameters]

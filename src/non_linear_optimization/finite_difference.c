@@ -1,11 +1,10 @@
 
-int finite_difference (int n, double *h, double x[], double df[], 
+#include <stdio.h>
+
+int finite_difference (int n, double *h, double x[], double f[], double df[], 
     int (*vector_field) (int n, double t, double x[], double f[], void * prms), void * prms) {
-
-    double f[n];
+    
     double df_col[n];
-
-    vector_field(n,0.0,x,f,prms);
 
     for (int i = 0; i < n; i++) {
         x[i] += *h;

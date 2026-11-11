@@ -7,4 +7,4 @@ Everything else has been programmed on my own, inspired by the format of the exe
 
 ### AI disclosure:
 
-AI has only been used to detect compilation errors which depend on the C syntax and questions about the C (and Makefile) syntaxis in general to understand and develop my C knowledge, but it has not been used to program any numerical method. The objective of the whole project is trying to program the methods my myself.
+AI has only been used to detect compilation errors which depend on the C syntax and questions about the C (and Makefile) syntax in general to understand and develop my C knowledge, but it has not been used to program any numerical method. The objective of the whole project is trying to program the methods my myself.

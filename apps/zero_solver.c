@@ -18,7 +18,8 @@ int main (int argc, char * argv[]) {
     double tolnt = atof(argv[4]);
     int stepmax = atoi(argv[5]);
 
-    double xprev[n], x[n], f[n], *df, errmaxx, errmaxf, errx, errf;
+    double x[n], f[n], *df;
+    int conv;
 
     FILE * seed = fopen("data/seed.txt","r");
 
@@ -34,29 +35,19 @@ int main (int argc, char * argv[]) {
 
     for (int k = 0; k < stepmax; k++) {
 
-        memcpy(xprev,x,n*sizeof(double));
-        newton_raphson(n,&h,x,f,df,tolsys,&vector_field,NULL);
+        conv = newton_raphson(n,&h,x,f,df,tolsys,tolnt,&vector_field,NULL);
 
         for (int i = 0; i < n; i++) fprintf(solution,"%.16g ",x[i]);
         fprintf(solution,"\n");
-        
-        errmaxx = 0;
-        errmaxf = 0;
-        for (int i = 0; i < n; i++) {
-            errx = fabs(x[i] - xprev[i]);
-            errf = fabs(f[i]);
-            if (errx > errmaxx) errmaxx = errx;
-            if (errf > errmaxf) errmaxf = errf;
+
+        if (conv == 0) {
+            printf("The method has converged in %i terations\n",k);
+            return 0;
         }
 
-        if (errmaxx < tolnt || errmaxf < tolnt) {
-            printf("The method has converged in %i iterations\n",k+1);
-            return 0;
-        }
-        
-        if (k == stepmax - 1) {
-            printf("The method did not converge in %i iterations\n",stepmax);
-            return 0;
+        else if (k == stepmax-1) {
+            printf("The method has not converged\n");
+            return -1;
         }
     }
 

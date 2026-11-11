@@ -24,29 +24,47 @@ by computing the matrix analytically (quadratic convergence, can be difficult or
 
 */
 
+#include <math.h>
+#include <string.h>
 #include "linsyslib.h"
 #include "derivatives.h"
+#include "matrix_print.h"
 
-int newton_raphson (int n, double *h, double x[], double f[], double df[], double tolsys,
-    int (*VF) (int n, double t, double x[], double f[], void * prms), void * prms) {
+int newton_raphson (int n, double *h, double x[], double f[], double df[], double tolsys, double tolnt,
+    int (*vector_field) (int n, double t, double x[], double f[], void * prms), void * prms) {
 
     int p[n];
     double u[n];
 
-    VF(n,0.0,x,f,prms);
+    vector_field(n,0.0,x,f,prms);
 
-    for (int i = 0; i < n; i++) f[i] *= -1.0;
+    double xprev[n], errmaxx, errmaxf, errx, errf;
 
-    if ( *h > 0 ) finite_difference(n,h,x,df,VF,prms);
+    memcpy(xprev,x,n*sizeof(double));
+
+    if ( *h > 0 ) finite_difference(n,h,x,f,df,vector_field,prms);
 
     if ( *h == 0) eval_derivative(n,x,df,prms);
+
+    for (int i = 0; i < n; i++) f[i] *= -1.0;
 
     LU_matrix(n,df,p,tolsys);
 
     LU_solver(n,df,p,u,f,tolsys);
 
     for (int i = 0; i < n; i++) x[i] += u[i];
+
+    errmaxx = 0;
+    errmaxf = 0;
+    for (int i = 0; i < n; i++) {
+        errx = fabs(x[i] - xprev[i]);
+        errf = fabs(f[i]);
+        if (errx > errmaxx) errmaxx = errx;
+        if (errf > errmaxf) errmaxf = errf;
+    }
+
+    if (errmaxx < tolnt || errmaxf < tolnt) return 0;
     
-    return 0;
+    return -1;
 
 }

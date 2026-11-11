@@ -6,7 +6,7 @@
 
 int main (int argc, char *argv[]) {
 
-    FILE *cts = fopen("data/constants.txt","r");
+    FILE *cts = fopen("data/constants_ivp.txt","r");
     FILE *trj = fopen("data/trajectory.txt","w");
 
     int n, pn;
@@ -26,8 +26,6 @@ int main (int argc, char *argv[]) {
 
     t = t0;
     h *= (T>=0?1:-1);
-
-    
 
     for (int i=0; fabs(t-t0+h)<fabs(T); i++){
         rk78(&t, x, &h, hmin, hmax, tol, n, &vector_field, p);
