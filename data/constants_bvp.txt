@@ -1,12 +1,10 @@
-11
-2 1
-0 1.57079633
-1
-1e-5 1e-10 1e-2 1e-8 1e-10 1e-10 1e-10 10000 1000
+2 2 1
+0 1
+2.61 7.63
+1e-5 1e-10 1e-2 1e-8 1e-10 1e-10 1e-10 10000 10000
 
 
-n-parameters
-n m
+n m k
 a b
 s0[m]
 h hmin hmax hd tolsys tol tolsh stepmaxrk stepmaxsh

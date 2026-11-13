@@ -35,7 +35,7 @@ int main (int argc, char * argv[]) {
 
     for (int k = 0; k < stepmax; k++) {
 
-        conv = newton_raphson(n,&h,x,f,df,tolsys,tolnt,&vector_field,NULL);
+        conv = newton_raphson(n,&h,x,f,df,tolsys,tolnt,&vector_field,&jacobian,NULL);
 
         for (int i = 0; i < n; i++) fprintf(solution,"%.16g ",x[i]);
         fprintf(solution,"\n");

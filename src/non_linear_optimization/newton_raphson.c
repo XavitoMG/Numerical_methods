@@ -31,7 +31,10 @@ by computing the matrix analytically (quadratic convergence, can be difficult or
 #include "matrix_print.h"
 
 int newton_raphson (int n, double *h, double x[], double f[], double df[], double tolsys, double tolnt,
-    int (*vector_field) (int n, double t, double x[], double f[], void * prms), void * prms) {
+    int (*vector_field) (int n, double t, double x[], double f[], void *prms),
+    int (*jacobian) (int n, double t, double x[], double df[], void *prms),
+    void * prms)
+    {
 
     int p[n];
     double u[n];
@@ -44,13 +47,16 @@ int newton_raphson (int n, double *h, double x[], double f[], double df[], doubl
 
     if ( *h > 0 ) finite_difference(n,h,x,f,df,vector_field,prms);
 
-    if ( *h == 0) eval_derivative(n,x,df,prms);
+    if ( *h == 0) jacobian(n,0.0,x,df,prms);
+
+    //matrix_print(n,n,df);
 
     for (int i = 0; i < n; i++) f[i] *= -1.0;
 
     LU_matrix(n,df,p,tolsys);
 
     LU_solver(n,df,p,u,f,tolsys);
+
 
     for (int i = 0; i < n; i++) x[i] += u[i];
 

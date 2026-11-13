@@ -37,10 +37,11 @@ lose a degree of convergence, being just linear.
 
 int shooting_method (int m, double *hd, double *s, double *f, double *df, double tolsys, double tolnt,
     int (*shooting_function) (int n, double t, double x[], double f[], void *prms), 
+    int (*shooting_jacobian) (int m, double t, double s[], double dT[], void * prms),
     void *prms) {
 
     // T(s) = g(s,x(b;s))
     
-    return newton_raphson(m, hd, s, f, df, tolsys, tolnt, shooting_function, prms);
+    return newton_raphson(m, hd, s, f, df, tolsys, tolnt, shooting_function, shooting_jacobian, prms);
     
 }
