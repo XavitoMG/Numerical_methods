@@ -10,6 +10,8 @@ typedef struct
     int stepmaxrk;
     double a;
     double b;
+    double r0;
+    double rf;
     int (*vector_field) (int n, double t, double *x, double *f, void *prms);
     double T;
 } shooting_prms;

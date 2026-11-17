@@ -1,0 +1,10 @@
+mu=0.012150585609624
+RMoon=1737.5
+aMoon=384747.167942518
+TMoon=27.321577
+REarth=6371
+set size ratio -1
+set object 1 circle at mu,0 radius REarth/aMoon fc "skyblue" fs solid
+set object 2 circle at mu-1,0 radius RMoon/aMoon fc "gray" fs solid
+plot 'data/trajectory.txt' u 1:2 w l
+pause -1

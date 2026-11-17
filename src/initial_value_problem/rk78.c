@@ -47,7 +47,7 @@ int rk78 (double *t, double x[], double *h,
               0.,   41./840.,   41./840.
    };
    int ib, j, k, l, iret;
-   double tt, bet, d, wksp[15*n], *r=wksp, *b=wksp+13*n,
+   double tt, bet, d, dd, e3, wksp[15*n], *r=wksp, *b=wksp+13*n,
           *f=wksp+14*n;
    do {
       ib=0;
@@ -62,7 +62,7 @@ int rk78 (double *t, double x[], double *h,
          iret=camp(n,tt,b/*x*/,r+n*j/*f*/,prm);
          if (iret) return iret;
       }
-      d=0;
+      dd=d=0;
       for (l=0; l<n; l++) {
          b[l]=f[l]=x[l];
          for (k=0; k<11; k++) {
@@ -72,17 +72,20 @@ int rk78 (double *t, double x[], double *h,
          }
          f[l]+=(*h)*(cp[11]*r[11*n+l]+cp[12]*r[12*n+l]);
          d+=fabs(f[l]-b[l]);
+         dd+=fabs(f[l]);
       }
       d/=n;
-      if (d<tol || fabs(*h)<=hmin) break;
-      (*h)*=.9*pow(tol/d,.125);
+      e3=tol*(1.+.01*dd);
+      if (d<e3 || fabs(*h)<=hmin) break;
+      (*h)*=.9*pow(e3/d,.125);
       if (fabs((*h))<hmin) (*h)=SGN(*h)*hmin;
    } while (1);
    (*t)+=(*h);
    memcpy(x, f, n*sizeof(double));
-   if (d<tol) { double tmp=tol/256; if (d<tmp) d=tmp; }
-   (*h)*=.9*pow(tol/d,.125);
-   if (fabs(*h)<hmin) { 
+   if (d<e3) { double tmp=e3/256; if (d<tmp) d=tmp; }
+   (*h)*=.9*pow(e3/d,.125);
+   if (hmin==hmax) return 0;
+   else if (fabs(*h)<hmin) { 
       (*h)=SGN(*h)*hmin;
       //fprintf(stderr,"rk78():: t %G : ajusto a pasmin %G !!\n", *t, hmin);
    }
@@ -90,7 +93,6 @@ int rk78 (double *t, double x[], double *h,
       (*h)=SGN(*h)*hmax;
       //fprintf(stderr,"rk78():: t %G : ajusto a pasmax %G\n", *t, hmax);
    }
-   //printf("(%lf %lf)\n",*t, x[0]);
    return 0;
 }
 

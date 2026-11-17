@@ -45,10 +45,9 @@ bvp_solver_files =                     \
 	
 
 bvp_solver_main = $(APP)/bvp_solver.o
-
 	
 
-all: $(BIN)/ivp_solver $(BIN)/linsys_solver $(BIN)/zero_solver $(BIN)/bvp_solver
+all: $(BIN)/ivp_solver $(BIN)/linsys_solver $(BIN)/zero_solver $(BIN)/bvp_solver $(BIN)/test
 
 $(BIN)/ivp_solver: $(ivp_solver_files) $(ivp_solver_main)
 	gcc -g -Wall $^ -o $@ -lm
@@ -57,6 +56,8 @@ $(BIN)/linsys_solver: $(linsys_solver_files) $(linsys_solver_main)
 $(BIN)/zero_solver: $(zero_solver_files)  $(zero_solver_main)
 	gcc -g -Wall $^ -o $@ -lm
 $(BIN)/bvp_solver: $(bvp_solver_files) $(bvp_solver_main)
+	gcc -g -Wall $^ -o $@ -lm
+$(BIN)/test: $(APP)/test.o
 	gcc -g -Wall $^ -o $@ -lm
 
 $(SRC_IVP)/%.o: $(SRC_IVP)/%.c $(INC)/*.h

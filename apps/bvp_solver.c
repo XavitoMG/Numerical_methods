@@ -5,6 +5,8 @@
 #include "vector_field.h"
 #include "rk78.h"
 
+#define MU 1.215058560962404e-2
+
 int main (int argc, char * argv[]) {
 
 
@@ -17,7 +19,7 @@ int main (int argc, char * argv[]) {
 
     shooting_prms prms;
     int n, m, stepmaxsh, conv;
-    double hd, tolsys, tolsh;
+    double hd, tolsys, tolsh, r0, rf, T, a, v0;
     double *f, *df;
     fscanf(cts,"%i %i %i",&n,&m,&prms.k);
     double s[m], x[n];
@@ -41,16 +43,31 @@ int main (int argc, char * argv[]) {
     prms.m = m;
     prms.vector_field = &vector_field_shooting;
 
+    r0 = s[0];
+    rf = s[1];
+    T = s[2];
+    a = s[3];
+    v0 = s[4];
+
+    prms.rf = rf;
+    prms.r0 = r0;
+
+    s[0] = MU + r0 * cos(a);
+    s[1] = r0 * sin(a);
+    s[2] = -v0 * sin(a);
+    s[3] = v0 * cos(a);
+    s[4] = T;
+
     for (int i = 0; i < m; i++) fprintf(sol, "%lf ", s[i]);
     fprintf(sol, "\n");
 
     for (int k = 0; k < stepmaxsh; k++) {
 
-        printf("%lf %lf\n", s[0],s[1]);
+        printf("%.16g %.16g %.16g %.16g %.16g\n", s[0],s[1],s[2],s[3],s[4]);
         
         conv = shooting_method(m, &hd, s, f, df, tolsys, tolsh, &shooting_function, &shooting_jacobian, &prms);
         
-        for (int i = 0; i < m; i++) fprintf(sol, "%lf ", s[i]);
+        for (int i = 0; i < m; i++) fprintf(sol, "%.16g ", s[i]);
         fprintf(sol, "\n");
 
         if (conv == 0) {
